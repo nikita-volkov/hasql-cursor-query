@@ -24,6 +24,13 @@ data StreamingQuery a b =
     (Reducer Identity x b)
     Int64
 
+-- |
+-- Given a streaming query specification,
+-- parameters for it,
+-- name for the cursor, which must be unique across the currently running cursors,
+-- and connection,
+-- execute the query, aggregating its results, while automatically managing the cursor.
+-- 
 run :: StreamingQuery a b -> a -> ByteString -> Connection.Connection -> IO (Either Connection.ResultsError b)
 run (StreamingQuery template serializer rowDeserializer (Reducer enter step exit) batch) params name connection =
   runEitherT $ do
