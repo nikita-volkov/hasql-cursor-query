@@ -33,12 +33,11 @@ type StreamingQuery a b =
 -- |
 -- Given a streaming query specification,
 -- parameters for it,
--- name for the cursor, which must be unique across the currently running cursors,
 -- and connection,
 -- execute the query, aggregating its results, while automatically managing the cursor.
 -- 
-run :: StreamingQuery a b -> a -> ByteString -> Connection.Connection -> IO (Either Connection.ResultsError b)
-run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch) params name connection =
+run :: StreamingQuery a b -> a -> Connection.Connection -> IO (Either Connection.ResultsError b)
+run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch) params connection =
   runEitherT $ do
     EitherT $ Connection.executeParametricQuery connection (Queries.declareCursor name template serializer) params
     acc <-
@@ -59,3 +58,6 @@ run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch)
           then loop acc
           else pure acc
     pure (runIdentity (exit acc))
+  where
+    name =
+      "Hasql.Streaming"
