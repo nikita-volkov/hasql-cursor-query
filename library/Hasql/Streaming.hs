@@ -16,13 +16,19 @@ import qualified Hasql.Streaming.Queries as Queries
 -- Where reduction strategy determines how to fold the results and when to terminate,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
 -- 
-data StreamingQuery a b =
-  forall x. StreamingQuery 
+type StreamingQuery a b =
+  forall x.
+  (
     ByteString
+    ,
     (Serialization.Params a)
+    ,
     (Deserialization.Row x)
+    ,
     (Reducer Identity x b)
+    ,
     Int64
+  )
 
 -- |
 -- Given a streaming query specification,
@@ -32,7 +38,7 @@ data StreamingQuery a b =
 -- execute the query, aggregating its results, while automatically managing the cursor.
 -- 
 run :: StreamingQuery a b -> a -> ByteString -> Connection.Connection -> IO (Either Connection.ResultsError b)
-run (StreamingQuery template serializer rowDeserializer (Reducer enter step exit) batch) params name connection =
+run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch) params name connection =
   runEitherT $ do
     EitherT $ Connection.executeParametricQuery connection (Queries.declareCursor name template serializer) params
     acc <-
