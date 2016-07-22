@@ -43,6 +43,7 @@ library
   other-modules:
     Hasql.Streaming.Prelude
     Hasql.Streaming.Queries
+    Hasql.Streaming.Model
   exposed-modules:
     Hasql.Streaming
   build-depends:

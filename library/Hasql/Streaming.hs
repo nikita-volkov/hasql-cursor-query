@@ -1,4 +1,9 @@
 module Hasql.Streaming
+(
+  StreamingQuery(..),
+  F.BatchSize(..),
+  run,
+)
 where
 
 import Hasql.Streaming.Prelude
@@ -6,6 +11,7 @@ import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
 import qualified Hasql.Transaction as E
 import qualified Hasql.Streaming.Queries as C
+import qualified Hasql.Streaming.Model as F
 import qualified Control.Foldl as D
 
 
@@ -22,13 +28,8 @@ data StreamingQuery input output =
     paramsEncoder :: !(A.Params input),
     rowDecoder :: !(B.Row row),
     rowsFold :: !(D.Fold row output),
-    batchSize :: !BatchSize
+    batchSize :: !F.BatchSize
   }
-
--- |
--- Spefifies how many rows to fetch in a single DB rountrip.
-data BatchSize =
-  BatchSize_10 | BatchSize_100 | BatchSize_1000 | BatchSize_10000
 
 run :: StreamingQuery input output -> input -> E.Transaction output
 run StreamingQuery{..} input =
@@ -44,11 +45,4 @@ run StreamingQuery{..} input =
     closeCursor =
       E.query cursorName C.closeCursor
     fetchFromCursor =
-      E.query (batchSizeInt64, cursorName) (C.fetchFromCursor_fold rowsFold rowDecoder)
-      where
-        batchSizeInt64 =
-          case batchSize of
-            BatchSize_10 -> 10
-            BatchSize_100 -> 100
-            BatchSize_1000 -> 1000
-            BatchSize_10000 -> 10000
+      E.query (batchSize, cursorName) (C.fetchFromCursor_fold rowsFold rowDecoder)
