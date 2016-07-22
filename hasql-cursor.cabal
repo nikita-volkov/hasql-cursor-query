@@ -3,8 +3,9 @@ name:
 version:
   0.1
 category:
-  Hasql, Database, PostgreSQL
+  Hasql, Database, PostgreSQL, Streaming
 synopsis:
+  A declarative abstraction over PostgreSQL Cursor
 homepage:
   https://github.com/nikita-volkov/hasql-cursor 
 bug-reports:
