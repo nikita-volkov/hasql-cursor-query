@@ -1,4 +1,4 @@
-module Hasql.Streaming
+module Hasql.Cursor
 (
   StreamingQuery(..),
   F.BatchSize(..),
@@ -6,13 +6,13 @@ module Hasql.Streaming
 )
 where
 
-import Hasql.Streaming.Prelude
+import Hasql.Cursor.Prelude
 import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
 import qualified Hasql.Transaction as E
-import qualified Hasql.Streaming.Queries as C
-import qualified Hasql.Streaming.Model as F
-import qualified Hasql.Streaming.Transactions as G
+import qualified Hasql.Cursor.Queries as C
+import qualified Hasql.Cursor.Model as F
+import qualified Hasql.Cursor.Transactions as G
 import qualified Control.Foldl as D
 
 
@@ -40,7 +40,7 @@ run StreamingQuery{..} input =
   declareCursor *> fetchFromCursor <* closeCursor
   where
     cursorName =
-      "Hasql.Streaming"
+      "Hasql.Cursor"
     declareCursor =
       E.query input query
       where

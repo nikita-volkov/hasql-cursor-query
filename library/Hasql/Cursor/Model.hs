@@ -1,7 +1,7 @@
-module Hasql.Streaming.Model
+module Hasql.Cursor.Model
 where
 
-import Hasql.Streaming.Prelude
+import Hasql.Cursor.Prelude
 
 
 -- |

@@ -1,9 +1,9 @@
-module Hasql.Streaming.Transactions
+module Hasql.Cursor.Transactions
 where
 
-import Hasql.Streaming.Prelude
-import qualified Hasql.Streaming.Queries as A
-import qualified Hasql.Streaming.Model as B
+import Hasql.Cursor.Prelude
+import qualified Hasql.Cursor.Queries as A
+import qualified Hasql.Cursor.Model as B
 import qualified Hasql.Transaction as C
 import qualified Hasql.Decoders as E
 import qualified Control.Foldl as D

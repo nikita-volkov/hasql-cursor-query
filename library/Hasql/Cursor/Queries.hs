@@ -1,11 +1,11 @@
-module Hasql.Streaming.Queries
+module Hasql.Cursor.Queries
 where
 
-import Hasql.Streaming.Prelude
+import Hasql.Cursor.Prelude
 import qualified Hasql.Query as A
 import qualified Hasql.Encoders as B
 import qualified Hasql.Decoders as C
-import qualified Hasql.Streaming.Model as F
+import qualified Hasql.Cursor.Model as F
 import qualified ByteString.TreeBuilder as D
 import qualified Control.Foldl as E
 

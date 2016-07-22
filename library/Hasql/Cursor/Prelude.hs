@@ -1,4 +1,4 @@
-module Hasql.Streaming.Prelude
+module Hasql.Cursor.Prelude
 ( 
   module Exports,
 )
