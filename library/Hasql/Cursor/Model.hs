@@ -44,7 +44,10 @@ instance Applicative ReducingDecoder where
     ReducingDecoder rowDecoder3 rowsFold3
     where
       rowDecoder3 =
-        (,) <$> rowDecoder1 <*> rowDecoder2
+        strictPair <$> rowDecoder1 <*> rowDecoder2
+        where
+          strictPair !a !b =
+            (a, b)
       rowsFold3 =
         lmap fst rowsFold1 <*> lmap snd rowsFold2
 
