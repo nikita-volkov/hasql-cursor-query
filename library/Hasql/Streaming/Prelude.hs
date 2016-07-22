@@ -30,10 +30,6 @@ import Data.Functor.Contravariant.Divisible as Exports
 -------------------------
 import Contravariant.Extras as Exports
 
--- text
--------------------------
-import Data.Text as Exports (Text)
-
 -- bytestring
 -------------------------
 import Data.ByteString as Exports (ByteString)
