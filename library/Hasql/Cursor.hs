@@ -1,6 +1,6 @@
 module Hasql.Cursor
 (
-  StreamingQuery(..),
+  CursorQuery(..),
   F.BatchSize(..),
   run,
 )
@@ -25,9 +25,9 @@ import qualified Control.Foldl as D
 -- Essentially it is a parametric query specification extended with a reduction strategy and a batch size,
 -- where reduction strategy determines how to fold the results into the output,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
-data StreamingQuery input output =
+data CursorQuery input output =
   forall row. 
-  StreamingQuery {
+  CursorQuery {
     template :: !ByteString,
     paramsEncoder :: !(A.Params input),
     rowDecoder :: !(B.Row row),
@@ -35,8 +35,8 @@ data StreamingQuery input output =
     batchSize :: !F.BatchSize
   }
 
-run :: StreamingQuery input output -> input -> E.Transaction output
-run StreamingQuery{..} input =
+run :: CursorQuery input output -> input -> E.Transaction output
+run CursorQuery{..} input =
   declareCursor *> fetchFromCursor <* closeCursor
   where
     cursorName =
