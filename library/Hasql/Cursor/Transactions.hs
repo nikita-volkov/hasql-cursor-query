@@ -45,6 +45,8 @@ closeCursor :: ByteString -> C.Transaction ()
 closeCursor cursorName =
   C.query cursorName A.closeCursor
 
+-- |
+-- Executes a CursorQuery in a Transaction provided the parameters.
 cursorQuery :: params -> B.CursorQuery params result -> C.Transaction result
 cursorQuery params (B.CursorQuery template encoder (B.ReducingDecoder rowDecoder rowsFold) batchSize) =
   declareCursor cursorName template encoder params *>
