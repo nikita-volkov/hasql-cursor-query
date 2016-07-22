@@ -2,9 +2,9 @@ module Hasql.Streaming
 where
 
 import Hasql.Streaming.Prelude
-import qualified Hasql.Connection as Connection
-import qualified Hasql.Serialization as Serialization
-import qualified Hasql.Deserialization as Deserialization
+import qualified Hasql
+import qualified Hasql.Encoding as Encoding
+import qualified Hasql.Decoding as Decoding
 import qualified Hasql.Streaming.Queries as Queries
 
 
@@ -21,9 +21,9 @@ type StreamingQuery a b =
   (
     ByteString
     ,
-    (Serialization.Params a)
+    (Encoding.Params a)
     ,
-    (Deserialization.Row x)
+    (Decoding.Row x)
     ,
     (Reducer Identity x b)
     ,
@@ -36,10 +36,10 @@ type StreamingQuery a b =
 -- and connection,
 -- execute the query, aggregating its results, while automatically managing the cursor.
 -- 
-run :: StreamingQuery a b -> a -> Connection.Connection -> IO (Either Connection.ResultsError b)
+run :: StreamingQuery a b -> a -> Hasql.Connection -> IO (Either Hasql.ResultsError b)
 run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch) params connection =
   runEitherT $ do
-    EitherT $ Connection.executeParametricQuery connection (Queries.declareCursor name template serializer) params
+    EitherT $ Hasql.query connection (Queries.declareCursor name template serializer) params
     acc <-
       ($ runIdentity enter) $ fix $ \loop acc -> do
         let
@@ -53,7 +53,7 @@ run ((,,,,) template serializer rowDeserializer (Reducer enter step exit) batch)
             (All True, acc)
           query =
             Queries.fetchFromCursor rowDeserializer foldStep foldInit
-        (All continue, acc) <- EitherT $ Connection.executeParametricQuery connection query (batch, name)
+        (All continue, acc) <- EitherT $ Hasql.query connection query (batch, name)
         if continue
           then loop acc
           else pure acc

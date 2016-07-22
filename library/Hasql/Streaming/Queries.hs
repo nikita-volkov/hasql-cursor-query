@@ -2,33 +2,33 @@ module Hasql.Streaming.Queries
 where
 
 import Hasql.Streaming.Prelude
-import Hasql.Query
-import qualified Hasql.Serialization as S
-import qualified Hasql.Deserialization as D
+import qualified Hasql as H
+import qualified Hasql.Encoding as HE
+import qualified Hasql.Decoding as HD
+import qualified ByteString.TreeBuilder as TB
 
 
--- * Streaming
--------------------------
-
-declareCursor :: ByteString -> ByteString -> S.Params a -> ParametricQuery a ()
-declareCursor name template serializer =
-  (template', serializer, D.result D.noResult, False)
+declareCursor :: ByteString -> ByteString -> HE.Params a -> H.Query a ()
+declareCursor name sql encoder =
+  H.Query sql' encoder HD.noResult False
   where
-    template' =
-      "DECLARE " <> name <> " NO SCROLL CURSOR FOR " <> template
+    sql' =
+      TB.toByteString $
+      "DECLARE " <> TB.byteString name <> " NO SCROLL CURSOR FOR " <> TB.byteString sql
 
-closeCursor :: ParametricQuery ByteString ()
+closeCursor :: H.Query ByteString ()
 closeCursor =
-  ("CLOSE $1", S.value (S.nonNull S.bytea), D.result D.noResult, True)
+  H.Query "CLOSE $1" (HE.value HE.bytea) HD.noResult True
 
-fetchFromCursor :: D.Row a -> (b -> a -> b) -> b -> ParametricQuery (Int64, ByteString) b
-fetchFromCursor rowDeserializer step init =
-  (template, serializer, deserializer, True)
+fetchFromCursor :: (b -> a -> b) -> b -> HD.Row a -> H.Query (Int64, ByteString) b
+fetchFromCursor step init rowDec =
+  H.Query sql encoder decoder True
   where
-    template =
+    sql =
       "FETCH FORWARD $1 FROM $2"
-    serializer =
-      contramap fst (S.value (S.nonNull S.int8)) <>
-      contramap snd (S.value (S.nonNull S.bytea))
-    deserializer =
-      D.result (D.foldlRows step init rowDeserializer)
+    encoder =
+      contrazip2
+        (HE.value HE.int8)
+        (HE.value HE.bytea)
+    decoder =
+      HD.foldlRows step init rowDec
