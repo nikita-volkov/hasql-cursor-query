@@ -21,6 +21,10 @@ import Control.Monad.Trans.State.Strict as Exports (State, runState, evalState, 
 import Control.Monad.Trans.Writer.Strict as Exports (Writer, runWriter, execWriter, mapWriter, WriterT(..), execWriterT, mapWriterT)
 import Data.Functor.Identity as Exports
 
+-- profunctors
+-------------------------
+import Data.Profunctor.Unsafe as Exports
+
 -- contravariant
 -------------------------
 import Data.Functor.Contravariant as Exports

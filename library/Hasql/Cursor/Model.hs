@@ -33,3 +33,10 @@ data CursorQuery input output =
     batchSize :: !BatchSize
   }
 
+instance Profunctor CursorQuery where
+  dimap fn1 fn2 (CursorQuery{..}) =
+    CursorQuery template (contramap fn1 paramsEncoder) rowDecoder (fmap fn2 rowsFold) batchSize
+
+instance Functor (CursorQuery input) where
+  fmap =
+    rmap
