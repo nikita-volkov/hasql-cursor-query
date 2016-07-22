@@ -46,7 +46,7 @@ library
     Hasql.Cursor.Queries
   exposed-modules:
     Hasql.Cursor.Transactions
-    Hasql.Cursor.Model
+    Hasql.Cursor.Specs
   build-depends:
     -- database:
     hasql >= 0.19 && < 0.20,

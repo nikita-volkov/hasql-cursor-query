@@ -6,7 +6,7 @@ where
 
 import Hasql.Cursor.Prelude
 import qualified Hasql.Cursor.Queries as A
-import qualified Hasql.Cursor.Model as B
+import qualified Hasql.Cursor.Specs as B
 import qualified Hasql.Transaction as C
 import qualified Hasql.Decoders as E
 import qualified Hasql.Encoders as F

@@ -1,4 +1,4 @@
-module Hasql.Cursor.Model
+module Hasql.Cursor.Specs
 where
 
 import Hasql.Cursor.Prelude
