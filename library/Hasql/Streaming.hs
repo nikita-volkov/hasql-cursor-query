@@ -12,14 +12,18 @@ import qualified Hasql.Decoders as B
 import qualified Hasql.Transaction as E
 import qualified Hasql.Streaming.Queries as C
 import qualified Hasql.Streaming.Model as F
+import qualified Hasql.Streaming.Transactions as G
 import qualified Control.Foldl as D
 
 
 -- |
 -- A specification of a streaming query.
 -- 
--- Essentially it is a parametric query extended with a reduction strategy and a batch size.
--- Where reduction strategy determines how to fold the results and when to terminate,
+-- Provides an abstraction over Postgres Cursor,
+-- which allows to process result sets of any size in constant memory.
+-- 
+-- Essentially it is a parametric query specification extended with a reduction strategy and a batch size,
+-- where reduction strategy determines how to fold the results into the output,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
 data StreamingQuery input output =
   forall row. 
@@ -45,4 +49,4 @@ run StreamingQuery{..} input =
     closeCursor =
       E.query cursorName C.closeCursor
     fetchFromCursor =
-      E.query (batchSize, cursorName) (C.fetchFromCursor_fold rowsFold rowDecoder)
+      G.fetchAndFoldCursor cursorName batchSize rowDecoder rowsFold
