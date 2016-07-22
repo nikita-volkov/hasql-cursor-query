@@ -30,16 +30,16 @@ instance Functor (CursorQuery params) where
 
 -- |
 -- A specification of how to decode and reduce multiple rows.
-data ReducingDecoder result =
-  forall row. ReducingDecoder !(B.Row row) !(D.Fold row result)
+data ReducingDecoder reduction =
+  forall row. ReducingDecoder !(B.Row row) !(D.Fold row reduction)
 
 instance Functor ReducingDecoder where
   fmap fn (ReducingDecoder rowDecoder rowsFold) =
     ReducingDecoder rowDecoder (fmap fn rowsFold)
 
 instance Applicative ReducingDecoder where
-  pure result =
-    ReducingDecoder (pure ()) (pure result)
+  pure reduction =
+    ReducingDecoder (pure ()) (pure reduction)
   (<*>) (ReducingDecoder rowDecoder1 rowsFold1) (ReducingDecoder rowDecoder2 rowsFold2) =
     ReducingDecoder rowDecoder3 rowsFold3
     where
