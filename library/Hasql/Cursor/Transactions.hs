@@ -37,17 +37,17 @@ fetchAndFoldCursorBatch :: ByteString -> B.BatchSize -> E.Row row -> D.Fold row 
 fetchAndFoldCursorBatch cursorName batchSize rowDecoder rowsFold =
   C.query (batchSize, cursorName) (A.fetchFromCursor_fold rowsFold rowDecoder)
 
-declareCursor :: ByteString -> ByteString -> F.Params input -> input -> C.Transaction ()
-declareCursor cursorName template inputEncoder input =
-  C.query input (A.declareCursor cursorName template inputEncoder)
+declareCursor :: ByteString -> ByteString -> F.Params params -> params -> C.Transaction ()
+declareCursor cursorName template paramsEncoder params =
+  C.query params (A.declareCursor cursorName template paramsEncoder)
 
 closeCursor :: ByteString -> C.Transaction ()
 closeCursor cursorName =
   C.query cursorName A.closeCursor
 
-cursorQuery :: input -> B.CursorQuery input output -> C.Transaction output
-cursorQuery input B.CursorQuery{..} =
-  declareCursor cursorName template paramsEncoder input *>
+cursorQuery :: params -> B.CursorQuery params result -> C.Transaction result
+cursorQuery params (B.CursorQuery template encoder (B.ReducingDecoder rowDecoder rowsFold) batchSize) =
+  declareCursor cursorName template encoder params *>
   fetchAndFoldCursor cursorName batchSize rowDecoder rowsFold <*
   closeCursor cursorName
   where

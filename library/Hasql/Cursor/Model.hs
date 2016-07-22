@@ -15,28 +15,42 @@ data BatchSize =
 
 
 -- |
+-- A specification of how to decode and reduce multiple rows.
+data ReducingDecoder result =
+  forall row. ReducingDecoder !(B.Row row) !(D.Fold row result)
+
+instance Functor ReducingDecoder where
+  fmap fn (ReducingDecoder rowDecoder rowsFold) =
+    ReducingDecoder rowDecoder (fmap fn rowsFold)
+
+instance Applicative ReducingDecoder where
+  pure result =
+    ReducingDecoder (pure ()) (pure result)
+  (<*>) (ReducingDecoder rowDecoder1 rowsFold1) (ReducingDecoder rowDecoder2 rowsFold2) =
+    ReducingDecoder rowDecoder3 rowsFold3
+    where
+      rowDecoder3 =
+        (,) <$> rowDecoder1 <*> rowDecoder2
+      rowsFold3 =
+        lmap fst rowsFold1 <*> lmap snd rowsFold2
+
+
+-- |
 -- A specification of a streaming query.
 -- 
 -- Provides an abstraction over Postgres Cursor,
 -- which allows to process result sets of any size in constant memory.
 -- 
 -- Essentially it is a parametric query specification extended with a reduction strategy and a batch size,
--- where reduction strategy determines how to fold the results into the output,
+-- where reduction strategy determines how to fold the rows into the final result,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
-data CursorQuery input output =
-  forall row. 
-  CursorQuery {
-    template :: !ByteString,
-    paramsEncoder :: !(A.Params input),
-    rowDecoder :: !(B.Row row),
-    rowsFold :: !(D.Fold row output),
-    batchSize :: !BatchSize
-  }
+data CursorQuery params result =
+  CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !BatchSize
 
 instance Profunctor CursorQuery where
-  dimap fn1 fn2 (CursorQuery{..}) =
-    CursorQuery template (contramap fn1 paramsEncoder) rowDecoder (fmap fn2 rowsFold) batchSize
+  dimap fn1 fn2 (CursorQuery template encoder decoder batchSize) =
+    CursorQuery template (contramap fn1 encoder) (fmap fn2 decoder) batchSize
 
-instance Functor (CursorQuery input) where
+instance Functor (CursorQuery params) where
   fmap =
     rmap
