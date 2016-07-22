@@ -6,6 +6,7 @@ import qualified Hasql.Query as A
 import qualified Hasql.Encoders as B
 import qualified Hasql.Decoders as C
 import qualified ByteString.TreeBuilder as D
+import qualified Control.Foldl as E
 
 
 declareCursor :: ByteString -> ByteString -> B.Params a -> A.Query a ()
@@ -32,3 +33,8 @@ fetchFromCursor step init rowDec =
         (B.value B.bytea)
     decoder =
       C.foldlRows step init rowDec
+
+fetchFromCursor_fold :: E.Fold row result -> C.Row row -> A.Query (Int64, ByteString) result
+fetchFromCursor_fold (E.Fold progress enter exit) =
+  fmap exit . fetchFromCursor progress enter
+      

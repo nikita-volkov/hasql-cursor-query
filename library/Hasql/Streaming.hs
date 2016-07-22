@@ -44,9 +44,7 @@ run StreamingQuery{..} input =
     closeCursor =
       E.query cursorName C.closeCursor
     fetchFromCursor =
-      case rowsFold of
-        D.Fold progress enter exit ->
-          E.query (batchSizeInt64, cursorName) (fmap exit (C.fetchFromCursor progress enter rowDecoder))
+      E.query (batchSizeInt64, cursorName) (C.fetchFromCursor_fold rowsFold rowDecoder)
       where
         batchSizeInt64 =
           case batchSize of
