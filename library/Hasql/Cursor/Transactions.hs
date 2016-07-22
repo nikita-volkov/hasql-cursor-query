@@ -37,18 +37,19 @@ fetchAndFoldCursorBatch :: ByteString -> B.BatchSize -> E.Row row -> D.Fold row 
 fetchAndFoldCursorBatch cursorName batchSize rowDecoder rowsFold =
   C.query (batchSize, cursorName) (A.fetchFromCursor_fold rowsFold rowDecoder)
 
+declareCursor :: ByteString -> ByteString -> F.Params input -> input -> C.Transaction ()
+declareCursor cursorName template inputEncoder input =
+  C.query input (A.declareCursor cursorName template inputEncoder)
+
+closeCursor :: ByteString -> C.Transaction ()
+closeCursor cursorName =
+  C.query cursorName A.closeCursor
+
 cursorQuery :: input -> B.CursorQuery input output -> C.Transaction output
 cursorQuery input B.CursorQuery{..} =
-  declareCursor *> fetchFromCursor <* closeCursor
+  declareCursor cursorName template paramsEncoder input *>
+  fetchAndFoldCursor cursorName batchSize rowDecoder rowsFold <*
+  closeCursor cursorName
   where
     cursorName =
       "Hasql.Cursor"
-    declareCursor =
-      C.query input query
-      where
-        query =
-          A.declareCursor cursorName template paramsEncoder
-    closeCursor =
-      C.query cursorName A.closeCursor
-    fetchFromCursor =
-      fetchAndFoldCursor cursorName batchSize rowDecoder rowsFold
