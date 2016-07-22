@@ -1,8 +1,6 @@
 module Hasql.Streaming.Prelude
 ( 
   module Exports,
-  bug,
-  bottom,
 )
 where
 
@@ -15,14 +13,13 @@ import BasePrelude as Exports hiding (assert, left, right, isLeft, isRight, erro
 -------------------------
 import Control.Monad.IO.Class as Exports
 import Control.Monad.Trans.Class as Exports
-import Control.Monad.Trans.Maybe as Exports hiding (liftListen, liftPass)
-import Control.Monad.Trans.Reader as Exports hiding (liftCallCC, liftCatch)
-import Control.Monad.Trans.State.Strict as Exports hiding (liftCallCC, liftCatch, liftListen, liftPass)
+import Control.Monad.Trans.Cont as Exports hiding (shift, callCC)
+import Control.Monad.Trans.Except as Exports (ExceptT(ExceptT), Except, except, runExcept, runExceptT, mapExcept, mapExceptT, withExcept, withExceptT)
+import Control.Monad.Trans.Maybe as Exports
+import Control.Monad.Trans.Reader as Exports (Reader, runReader, mapReader, withReader, ReaderT(ReaderT), runReaderT, mapReaderT, withReaderT)
+import Control.Monad.Trans.State.Strict as Exports (State, runState, evalState, execState, mapState, withState, StateT(StateT), runStateT, evalStateT, execStateT, mapStateT, withStateT)
+import Control.Monad.Trans.Writer.Strict as Exports (Writer, runWriter, execWriter, mapWriter, WriterT(..), execWriterT, mapWriterT)
 import Data.Functor.Identity as Exports
-
--- terminating-reducer
--------------------------
-import TerminatingReducer as Exports (Reducer(..))
 
 -- contravariant
 -------------------------
@@ -33,11 +30,6 @@ import Data.Functor.Contravariant.Divisible as Exports
 -------------------------
 import Contravariant.Extras as Exports
 
--- either
--------------------------
-import Control.Monad.Trans.Either as Exports
-import Data.Either.Combinators as Exports
-
 -- text
 -------------------------
 import Data.Text as Exports (Text)
@@ -45,23 +37,3 @@ import Data.Text as Exports (Text)
 -- bytestring
 -------------------------
 import Data.ByteString as Exports (ByteString)
-
--- placeholders
--------------------------
-import Development.Placeholders as Exports
-
--- loch-th
--------------------------
-import Debug.Trace.LocationTH as Exports
-
--- custom
--------------------------
-import qualified Debug.Trace.LocationTH
-
-bug =
-  [e| $(Debug.Trace.LocationTH.failure) . (msg <>) |]
-  where
-    msg = "A \"hasql\" package bug: " :: String
-
-bottom =
-  [e| $bug "Bottom evaluated" |]
