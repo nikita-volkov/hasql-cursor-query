@@ -42,8 +42,10 @@ library
   default-language:
     Haskell2010
   other-modules:
-    Hasql.Cursor.Prelude
-    Hasql.Cursor.Queries
+    Hasql.Cursor.Private.Prelude
+    Hasql.Cursor.Private.Queries
+    Hasql.Cursor.Private.Specs
+    Hasql.Cursor.Private.Transactions
   exposed-modules:
     Hasql.Cursor.Transactions
     Hasql.Cursor.Specs

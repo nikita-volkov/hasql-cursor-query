@@ -1,11 +1,11 @@
-module Hasql.Cursor.Queries
+module Hasql.Cursor.Private.Queries
 where
 
-import Hasql.Cursor.Prelude
+import Hasql.Cursor.Private.Prelude
 import qualified Hasql.Query as A
 import qualified Hasql.Encoders as B
 import qualified Hasql.Decoders as C
-import qualified Hasql.Cursor.Specs as F
+import qualified Hasql.Cursor.Private.Specs as F
 import qualified ByteString.TreeBuilder as D
 import qualified Control.Foldl as E
 
