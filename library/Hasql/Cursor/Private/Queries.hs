@@ -22,8 +22,8 @@ closeCursor :: A.Query ByteString ()
 closeCursor =
   A.statement "CLOSE $1" (B.value B.bytea) C.unit True
 
-fetchFromCursor :: (b -> a -> b) -> b -> C.Row a -> A.Query (F.BatchSize, ByteString) b
-fetchFromCursor step init rowDec =
+fetchFromCursor_decoder :: C.Result result -> A.Query (F.BatchSize, ByteString) result
+fetchFromCursor_decoder decoder =
   A.statement sql encoder decoder True
   where
     sql =
@@ -42,10 +42,12 @@ fetchFromCursor step init rowDec =
                 F.BatchSize_100 -> 100
                 F.BatchSize_1000 -> 1000
                 F.BatchSize_10000 -> 10000
-    decoder =
-      C.foldlRows step init rowDec
+
+fetchFromCursor_foldl :: (b -> a -> b) -> b -> C.Row a -> A.Query (F.BatchSize, ByteString) b
+fetchFromCursor_foldl step init rowDec =
+  fetchFromCursor_decoder (C.foldlRows step init rowDec)
 
 fetchFromCursor_fold :: E.Fold row result -> C.Row row -> A.Query (F.BatchSize, ByteString) result
 fetchFromCursor_fold (E.Fold progress enter exit) =
-  fmap exit . fetchFromCursor progress enter
+  fmap exit . fetchFromCursor_foldl progress enter
       
