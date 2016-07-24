@@ -22,9 +22,9 @@ fetchAndFoldCursor cursorName batchSize rowDecoder (D.Fold progress enter exit) 
   where
     fetchAndFoldMore batch =
       do
-        (fetched, fetchedBatch) <- fetchBatch
-        if fetched
-          then return fetchedBatch
+        (null, fetchedBatch) <- fetchBatch
+        if null
+          then return batch
           else fetchAndFoldMore fetchedBatch
       where
         fetchBatch =
