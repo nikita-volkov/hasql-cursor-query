@@ -67,7 +67,7 @@ library
     contravariant >= 1.3 && < 2,
     -- general:
     base-prelude >= 0.1.19 && < 2,
-    base >= 4.8 && < 5
+    base >= 4.6 && < 5
 
 
 test-suite tasty
