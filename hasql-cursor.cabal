@@ -46,8 +46,10 @@ library
     Hasql.Cursor.Private.Queries
     Hasql.Cursor.Private.Specs
     Hasql.Cursor.Private.Transactions
+    Hasql.Cursor.Private.Sessions
   exposed-modules:
     Hasql.Cursor.Transactions
+    Hasql.Cursor.Sessions
     Hasql.Cursor.Specs
   build-depends:
     -- database:
