@@ -2,7 +2,7 @@ module Hasql.CursorQuery.Private.Sessions
 where
 
 import Hasql.CursorQuery.Private.Prelude
-import qualified Hasql.CursorQuery.Private.Specs as B
+import qualified Hasql.CursorQuery.Private.CursorQuery as B
 import qualified Hasql.CursorQuery.Private.Transactions as C
 import qualified Hasql.Transaction as A
 import qualified Hasql.Session as D

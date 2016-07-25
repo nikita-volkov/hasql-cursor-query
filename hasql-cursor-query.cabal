@@ -43,7 +43,7 @@ library
     Haskell2010
   other-modules:
     Hasql.CursorQuery.Private.Prelude
-    Hasql.CursorQuery.Private.Specs
+    Hasql.CursorQuery.Private.CursorQuery
     Hasql.CursorQuery.Private.Decoders
     Hasql.CursorQuery.Private.Transactions
     Hasql.CursorQuery.Private.CursorTransactions
@@ -52,7 +52,7 @@ library
     Hasql.CursorQuery.Transactions
     Hasql.CursorQuery.CursorTransactions
     Hasql.CursorQuery.Sessions
-    Hasql.CursorQuery.Specs
+    Hasql.CursorQuery
   build-depends:
     -- database:
     hasql >= 0.19 && < 0.20,

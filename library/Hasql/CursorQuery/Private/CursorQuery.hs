@@ -1,4 +1,4 @@
-module Hasql.CursorQuery.Private.Specs
+module Hasql.CursorQuery.Private.CursorQuery
 where
 
 import Hasql.CursorQuery.Private.Prelude

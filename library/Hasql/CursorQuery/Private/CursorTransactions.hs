@@ -2,7 +2,7 @@ module Hasql.CursorQuery.Private.CursorTransactions
 where
 
 import Hasql.CursorQuery.Private.Prelude
-import qualified Hasql.CursorQuery.Private.Specs as B
+import qualified Hasql.CursorQuery.Private.CursorQuery as B
 import qualified Hasql.CursorQuery.Private.Decoders as I
 import qualified Hasql.Transaction as C
 import qualified Hasql.Decoders as E
