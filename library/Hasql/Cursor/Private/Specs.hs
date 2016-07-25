@@ -5,6 +5,7 @@ import Hasql.Cursor.Private.Prelude
 import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
 import qualified Control.Foldl as D
+import qualified Hasql.CursorTransaction.Specs as H
 
 
 -- |
@@ -17,7 +18,7 @@ import qualified Control.Foldl as D
 -- where reduction strategy determines how to fold the rows into the final result,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
 data CursorQuery params result =
-  CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !BatchSize
+  CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !H.BatchSize
 
 instance Profunctor CursorQuery where
   dimap fn1 fn2 (CursorQuery template encoder decoder batchSize) =
@@ -27,9 +28,18 @@ instance Functor (CursorQuery params) where
   fmap =
     rmap
 
+-- |
+-- Given an SQL template, a params encoder, a reducing result decoder and a batch-size,
+-- constructs CursorQuery.
+cursorQuery :: ByteString -> A.Params params -> ReducingDecoder result -> H.BatchSize -> CursorQuery params result
+cursorQuery =
+  CursorQuery
+
 
 -- |
 -- A specification of how to decode and reduce multiple rows.
+-- 
+-- Composable with the Applicative interface.
 data ReducingDecoder reduction =
   forall row. ReducingDecoder !(B.Row row) !(D.Fold row reduction)
 
@@ -51,9 +61,9 @@ instance Applicative ReducingDecoder where
       rowsFold3 =
         lmap fst rowsFold1 <*> lmap snd rowsFold2
 
-
 -- |
--- Spefifies how many rows to fetch in a single DB rountrip.
-data BatchSize =
-  BatchSize_10 | BatchSize_100 | BatchSize_1000 | BatchSize_10000
-  deriving (Enum, Bounded)
+-- Packs a row decoder and a fold over rows into ReducingDecoder.
+reducingDecoder :: B.Row row -> D.Fold row reduction -> ReducingDecoder reduction
+reducingDecoder =
+  ReducingDecoder
+
