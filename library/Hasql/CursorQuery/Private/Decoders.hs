@@ -1,7 +1,7 @@
-module Hasql.Cursor.Private.Decoders
+module Hasql.CursorQuery.Private.Decoders
 where
 
-import Hasql.Cursor.Private.Prelude
+import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.Decoders as A
 import qualified Control.Foldl as B
 

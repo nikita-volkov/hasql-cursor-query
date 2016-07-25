@@ -1,15 +1,15 @@
 name:
-  hasql-cursor
+  hasql-cursor-query
 version:
-  0.3
+  0.4
 category:
   Hasql, Database, PostgreSQL, Streaming
 synopsis:
   A declarative abstraction over PostgreSQL Cursor
 homepage:
-  https://github.com/nikita-volkov/hasql-cursor 
+  https://github.com/nikita-volkov/hasql-cursor-query 
 bug-reports:
-  https://github.com/nikita-volkov/hasql-cursor/issues 
+  https://github.com/nikita-volkov/hasql-cursor-query/issues 
 author:
   Nikita Volkov <nikita.y.volkov@mail.ru>
 maintainer:
@@ -30,7 +30,7 @@ source-repository head
   type:
     git
   location:
-    git://github.com/nikita-volkov/hasql-cursor.git
+    git://github.com/nikita-volkov/hasql-cursor-query.git
 
 
 library
@@ -42,17 +42,17 @@ library
   default-language:
     Haskell2010
   other-modules:
-    Hasql.Cursor.Private.Prelude
-    Hasql.Cursor.Private.Specs
-    Hasql.Cursor.Private.Decoders
-    Hasql.Cursor.Private.Transactions
-    Hasql.Cursor.Private.CursorTransactions
-    Hasql.Cursor.Private.Sessions
+    Hasql.CursorQuery.Private.Prelude
+    Hasql.CursorQuery.Private.Specs
+    Hasql.CursorQuery.Private.Decoders
+    Hasql.CursorQuery.Private.Transactions
+    Hasql.CursorQuery.Private.CursorTransactions
+    Hasql.CursorQuery.Private.Sessions
   exposed-modules:
-    Hasql.Cursor.Transactions
-    Hasql.Cursor.CursorTransactions
-    Hasql.Cursor.Sessions
-    Hasql.Cursor.Specs
+    Hasql.CursorQuery.Transactions
+    Hasql.CursorQuery.CursorTransactions
+    Hasql.CursorQuery.Sessions
+    Hasql.CursorQuery.Specs
   build-depends:
     -- database:
     hasql >= 0.19 && < 0.20,
@@ -88,7 +88,7 @@ test-suite tasty
   build-depends:
     -- database:
     hasql,
-    hasql-cursor,
+    hasql-cursor-query,
     -- testing:
     tasty == 0.11.*,
     tasty-quickcheck == 0.8.*,

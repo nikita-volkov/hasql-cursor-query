@@ -1,6 +1,6 @@
 -- |
 -- A DSL for declaring the specs.
-module Hasql.Cursor.Specs
+module Hasql.CursorQuery.Specs
 (
   A.CursorQuery,
   A.cursorQuery,
@@ -14,6 +14,6 @@ module Hasql.Cursor.Specs
 )
 where
 
-import qualified Hasql.Cursor.Private.Specs as A
+import qualified Hasql.CursorQuery.Private.Specs as A
 import qualified Hasql.CursorTransaction.Specs as B
 

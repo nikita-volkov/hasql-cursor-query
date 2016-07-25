@@ -1,9 +1,9 @@
-module Hasql.Cursor.Private.Transactions
+module Hasql.CursorQuery.Private.Transactions
 where
 
-import Hasql.Cursor.Private.Prelude
-import qualified Hasql.Cursor.Private.Specs as B
-import qualified Hasql.Cursor.Private.CursorTransactions as C
+import Hasql.CursorQuery.Private.Prelude
+import qualified Hasql.CursorQuery.Private.Specs as B
+import qualified Hasql.CursorQuery.Private.CursorTransactions as C
 import qualified Hasql.Transaction as A
 import qualified Hasql.CursorTransaction.Transactions as D
 

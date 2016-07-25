@@ -1,7 +1,7 @@
 module Main.CursorQueries where
 
 import Rebase.Prelude
-import Hasql.Cursor.Specs
+import Hasql.CursorQuery.Specs
 import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
 import qualified Control.Foldl as C

@@ -5,7 +5,7 @@ import Test.Tasty
 import Test.Tasty.Runners
 import Test.Tasty.HUnit
 import qualified Hasql.Session as A
-import qualified Hasql.Cursor.Sessions as C
+import qualified Hasql.CursorQuery.Sessions as C
 import qualified Main.CursorQueries as D
 import qualified Main.Queries as E
 import qualified Main.IO as F

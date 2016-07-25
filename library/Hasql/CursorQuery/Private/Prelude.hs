@@ -1,4 +1,4 @@
-module Hasql.Cursor.Private.Prelude
+module Hasql.CursorQuery.Private.Prelude
 ( 
   module Exports,
 )
