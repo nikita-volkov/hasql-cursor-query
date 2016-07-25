@@ -5,7 +5,7 @@ import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
 import qualified Control.Foldl as D
-import qualified Hasql.CursorTransaction.Specs as H
+import qualified Hasql.CursorTransaction as H
 
 
 -- |

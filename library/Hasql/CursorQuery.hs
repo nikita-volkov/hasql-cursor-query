@@ -15,5 +15,5 @@ module Hasql.CursorQuery
 where
 
 import qualified Hasql.CursorQuery.Private.CursorQuery as A
-import qualified Hasql.CursorTransaction.Specs as B
+import qualified Hasql.CursorTransaction as B
 

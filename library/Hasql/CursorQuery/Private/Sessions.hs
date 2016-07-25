@@ -3,8 +3,8 @@ where
 
 import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.CursorQuery.Private.CursorQuery as B
-import qualified Hasql.CursorQuery.Private.Transactions as C
-import qualified Hasql.Transaction as A
+import qualified Hasql.CursorQuery.Private.CursorTransactions as C
+import qualified Hasql.CursorTransaction.Sessions as A
 import qualified Hasql.Session as D
 
 
@@ -14,4 +14,4 @@ import qualified Hasql.Session as D
 -- During the execution it establishes a Read transaction with the ReadCommitted isolation level.
 cursorQuery :: params -> B.CursorQuery params result -> D.Session result
 cursorQuery params cursorQuery =
-  A.run (C.cursorQuery params cursorQuery) A.ReadCommitted A.Read
+  A.cursorTransaction (C.cursorQuery params cursorQuery)

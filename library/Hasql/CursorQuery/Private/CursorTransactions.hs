@@ -4,17 +4,15 @@ where
 import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.CursorQuery.Private.CursorQuery as B
 import qualified Hasql.CursorQuery.Private.Decoders as I
-import qualified Hasql.Transaction as C
 import qualified Hasql.Decoders as E
 import qualified Hasql.Encoders as F
 import qualified Hasql.CursorTransaction as G
-import qualified Hasql.CursorTransaction.Specs as H
 import qualified Control.Foldl as D
 
 
 -- |
 -- Fetch and fold the data from cursor until it dries out.
-fetchAndFoldCursor :: G.Cursor s -> H.BatchSize -> E.Row row -> D.Fold row result -> G.CursorTransaction s result
+fetchAndFoldCursor :: G.Cursor s -> G.BatchSize -> E.Row row -> D.Fold row result -> G.CursorTransaction s result
 fetchAndFoldCursor cursor batchSize rowDecoder (D.Fold progress enter exit) =
   fmap exit $
   fetchAndFoldMore enter
@@ -32,7 +30,7 @@ fetchAndFoldCursor cursor batchSize rowDecoder (D.Fold progress enter exit) =
             fold =
               (,) <$> D.null <*> D.Fold progress batch id
 
-fetchAndFoldCursorBatch :: G.Cursor s -> H.BatchSize -> E.Row row -> D.Fold row result -> G.CursorTransaction s result
+fetchAndFoldCursorBatch :: G.Cursor s -> G.BatchSize -> E.Row row -> D.Fold row result -> G.CursorTransaction s result
 fetchAndFoldCursorBatch cursor batchSize rowDecoder rowsFold =
   G.fetchBatch cursor batchSize (I.fold rowsFold rowDecoder)
 
@@ -40,6 +38,6 @@ fetchAndFoldCursorBatch cursor batchSize rowDecoder rowsFold =
 -- Executes CursorQuery in CursorTransaction provided the parameters.
 cursorQuery :: params -> B.CursorQuery params result -> G.CursorTransaction s result
 cursorQuery params (B.CursorQuery template encoder (B.ReducingDecoder rowDecoder rowsFold) batchSize) =
-  G.withCursor template (H.encodedParams encoder params) $
+  G.withCursor template (G.encodedParams encoder params) $
   \ cursor ->
     fetchAndFoldCursor cursor batchSize rowDecoder rowsFold
