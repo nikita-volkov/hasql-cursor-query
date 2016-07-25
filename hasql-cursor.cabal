@@ -67,3 +67,34 @@ library
     -- general:
     base-prelude >= 0.1.19 && < 2,
     base >= 4.8 && < 5
+
+
+test-suite tasty
+  type:
+    exitcode-stdio-1.0
+  hs-source-dirs:
+    tasty
+  main-is:
+    Main.hs
+  other-modules:
+    Main.CursorQueries
+    Main.Queries
+    Main.IO
+  default-extensions:
+    Arrows, BangPatterns, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, OverloadedStrings, PatternGuards, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, TemplateHaskell, TupleSections, TypeFamilies, TypeOperators, UnboxedTuples
+  default-language:
+    Haskell2010
+  build-depends:
+    -- database:
+    hasql,
+    hasql-cursor,
+    -- testing:
+    tasty == 0.11.*,
+    tasty-quickcheck == 0.8.*,
+    tasty-smallcheck == 0.8.*,
+    tasty-hunit == 0.9.*,
+    quickcheck-instances >= 0.3.11 && < 0.4,
+    QuickCheck >= 2.8.1 && < 2.9,
+    -- 
+    foldl >= 1.2 && < 2,
+    rebase < 2
