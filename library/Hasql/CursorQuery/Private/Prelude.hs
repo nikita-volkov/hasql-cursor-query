@@ -18,10 +18,6 @@ import Data.Profunctor.Unsafe as Exports
 import Data.Functor.Contravariant as Exports
 import Data.Functor.Contravariant.Divisible as Exports
 
--- contravariant-extras
--------------------------
-import Contravariant.Extras as Exports
-
 -- bytestring
 -------------------------
 import Data.ByteString as Exports (ByteString)
