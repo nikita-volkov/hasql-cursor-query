@@ -38,6 +38,6 @@ fetchAndFoldCursorBatch cursor batchSize rowDecoder rowsFold =
 -- Executes CursorQuery in CursorTransaction provided the parameters.
 cursorQuery :: params -> B.CursorQuery params result -> G.CursorTransaction s result
 cursorQuery params (B.CursorQuery template encoder (B.ReducingDecoder rowDecoder rowsFold) batchSize) =
-  G.withCursor template (G.encodedParams encoder params) $
-  \ cursor ->
+  do
+    cursor <- G.declareCursor template (G.encodedParams encoder params)
     fetchAndFoldCursor cursor batchSize rowDecoder rowsFold
