@@ -1,7 +1,7 @@
 name:
   hasql-cursor-query
 version:
-  0.4.2
+  0.4.3
 category:
   Hasql, Database, PostgreSQL, Streaming
 synopsis:
@@ -55,7 +55,7 @@ library
     Hasql.CursorQuery
   build-depends:
     -- database:
-    hasql >= 0.19 && < 0.20,
+    hasql >= 0.19 && < 0.20 && >= 1 && < 1.1,
     hasql-transaction >= 0.5 && < 0.6,
     hasql-cursor-transaction >= 0.6 && < 0.7,
     -- data:
