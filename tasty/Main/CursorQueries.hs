@@ -19,7 +19,7 @@ countPGType =
       reducingDecoder rowDecoder fold
       where
         rowDecoder =
-          (,) <$> B.value B.int8 <*> B.value B.text
+          (,) <$> B.column B.int8 <*> B.column B.text
         fold =
           C.length
 
@@ -35,7 +35,7 @@ slectOIDAndTypeName =
       reducingDecoder rowDecoder fold
       where
         rowDecoder =
-          (,) <$> B.value B.int8 <*> B.value B.text
+          (,) <$> B.column B.int8 <*> B.column B.text
         fold =
           C.list
 
