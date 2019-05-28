@@ -14,12 +14,12 @@ countPGType =
     sql =
       "select oid, typname from pg_type"
     encoder =
-      A.unit
+      A.noParams
     decoder =
       reducingDecoder rowDecoder fold
       where
         rowDecoder =
-          (,) <$> B.column B.int8 <*> B.column B.text
+          (,) <$> (B.column . B.nonNullable) B.int8 <*> (B.column . B.nonNullable) B.text
         fold =
           C.length
 
@@ -30,12 +30,12 @@ slectOIDAndTypeName =
     sql =
       "select oid, typname from pg_type"
     encoder =
-      A.unit
+      A.noParams
     decoder =
       reducingDecoder rowDecoder fold
       where
         rowDecoder =
-          (,) <$> B.column B.int8 <*> B.column B.text
+          (,) <$> (B.column . B.nonNullable) B.int8 <*> (B.column . B.nonNullable) B.text
         fold =
           C.list
 

@@ -13,9 +13,9 @@ countPGType =
     sql =
       "select count(*) from pg_type"
     encoder =
-      A.unit
+      A.noParams
     decoder =
-      B.singleRow (B.column (fmap fromIntegral B.int8))
+      (B.singleRow . B.column . B.nonNullable . fmap fromIntegral) B.int8
       
 slectOIDAndTypeName :: Statement () [(Int64, Text)]
 slectOIDAndTypeName =
@@ -24,9 +24,9 @@ slectOIDAndTypeName =
     sql =
       "select oid, typname from pg_type"
     encoder =
-      A.unit
+      A.noParams
     decoder =
       B.rowList rowDecoder
       where
         rowDecoder =
-          (,) <$> B.column B.int8 <*> B.column B.text
+          (,) <$> (B.column . B.nonNullable) B.int8 <*> (B.column . B.nonNullable) B.text
