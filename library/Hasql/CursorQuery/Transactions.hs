@@ -1,7 +1,6 @@
 module Hasql.CursorQuery.Transactions
-(
-  cursorQuery,
-)
+  ( cursorQuery,
+  )
 where
 
 import Hasql.CursorQuery.Private.Transactions
