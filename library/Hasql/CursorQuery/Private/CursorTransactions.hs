@@ -1,21 +1,18 @@
-module Hasql.CursorQuery.Private.CursorTransactions
-where
+module Hasql.CursorQuery.Private.CursorTransactions where
 
-import Hasql.CursorQuery.Private.Prelude
+import qualified Control.Foldl as D
 import qualified Hasql.CursorQuery.Private.CursorQuery as B
 import qualified Hasql.CursorQuery.Private.Decoders as I
-import qualified Hasql.Decoders as E
-import qualified Hasql.Encoders as F
+import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.CursorTransaction as G
-import qualified Control.Foldl as D
-
+import qualified Hasql.Decoders as E
 
 -- |
 -- Fetch and fold the data from cursor until it dries out.
 fetchAndFoldCursor :: G.Cursor s -> G.BatchSize -> E.Row row -> D.Fold row result -> G.CursorTransaction s result
 fetchAndFoldCursor cursor batchSize rowDecoder (D.Fold progress enter exit) =
-  fmap exit $
-  fetchAndFoldMore enter
+  fmap exit
+    $ fetchAndFoldMore enter
   where
     fetchAndFoldMore batch =
       do
