@@ -1,7 +1,6 @@
 module Hasql.CursorQuery.Sessions
-(
-  cursorQuery,
-)
+  ( cursorQuery,
+  )
 where
 
 import Hasql.CursorQuery.Private.Sessions

@@ -1,14 +1,13 @@
 module Main.IO where
 
-import Rebase.Prelude
-import qualified Hasql.Session as A
 import qualified Hasql.Connection as B
-
+import qualified Hasql.Session as A
+import Rebase.Prelude
 
 session :: A.Session a -> IO a
 session session =
-  withConnection (A.run session) >>=
-  either (fail . show) (either (fail . show) return)
+  withConnection (A.run session)
+    >>= either (fail . show) (either (fail . show) return)
   where
     withConnection :: (B.Connection -> IO a) -> IO (Either B.ConnectionError a)
     withConnection handler =
@@ -23,7 +22,7 @@ session session =
                 host = "localhost"
                 port = 5432
                 user = "postgres"
-                password = ""
+                password = "postgres"
                 database = "postgres"
         use connection =
           lift $ handler connection

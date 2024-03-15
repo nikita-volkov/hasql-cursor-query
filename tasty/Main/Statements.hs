@@ -1,10 +1,9 @@
 module Main.Statements where
 
-import Rebase.Prelude
-import Hasql.Statement
-import qualified Hasql.Encoders as A
 import qualified Hasql.Decoders as B
-
+import qualified Hasql.Encoders as A
+import Hasql.Statement
+import Rebase.Prelude
 
 countPGType :: Statement () Int
 countPGType =
@@ -16,7 +15,7 @@ countPGType =
       A.noParams
     decoder =
       (B.singleRow . B.column . B.nonNullable . fmap fromIntegral) B.int8
-      
+
 slectOIDAndTypeName :: Statement () [(Int64, Text)]
 slectOIDAndTypeName =
   Statement sql encoder decoder True

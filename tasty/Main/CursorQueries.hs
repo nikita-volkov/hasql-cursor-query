@@ -1,11 +1,10 @@
 module Main.CursorQueries where
 
-import Rebase.Prelude
-import Hasql.CursorQuery
-import qualified Hasql.Encoders as A
-import qualified Hasql.Decoders as B
 import qualified Control.Foldl as C
-
+import Hasql.CursorQuery
+import qualified Hasql.Decoders as B
+import qualified Hasql.Encoders as A
+import Rebase.Prelude
 
 countPGType :: CursorQuery () Int
 countPGType =
@@ -38,4 +37,3 @@ slectOIDAndTypeName =
           (,) <$> (B.column . B.nonNullable) B.int8 <*> (B.column . B.nonNullable) B.text
         fold =
           C.list
-

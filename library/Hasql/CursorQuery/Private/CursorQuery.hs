@@ -1,24 +1,22 @@
-module Hasql.CursorQuery.Private.CursorQuery
-where
+module Hasql.CursorQuery.Private.CursorQuery where
 
-import Hasql.CursorQuery.Private.Prelude
-import qualified Hasql.Encoders as A
-import qualified Hasql.Decoders as B
 import qualified Control.Foldl as D
+import Hasql.CursorQuery.Private.Prelude
 import qualified Hasql.CursorTransaction as H
-
+import qualified Hasql.Decoders as B
+import qualified Hasql.Encoders as A
 
 -- |
 -- A specification of a streaming query.
--- 
+--
 -- Provides an abstraction over Postgres Cursor,
 -- which allows to process result sets of any size in constant memory.
--- 
+--
 -- Essentially it is a parametric query specification extended with a reduction strategy and a batch size,
 -- where reduction strategy determines how to fold the rows into the final result,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
-data CursorQuery params result =
-  CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !H.BatchSize
+data CursorQuery params result
+  = CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !H.BatchSize
 
 instance Profunctor CursorQuery where
   dimap fn1 fn2 (CursorQuery template encoder decoder batchSize) =
@@ -35,13 +33,12 @@ cursorQuery :: ByteString -> A.Params params -> ReducingDecoder result -> H.Batc
 cursorQuery =
   CursorQuery
 
-
 -- |
 -- A specification of how to decode and reduce multiple rows.
--- 
+--
 -- Composable with the Applicative interface.
-data ReducingDecoder reduction =
-  forall row. ReducingDecoder !(B.Row row) !(D.Fold row reduction)
+data ReducingDecoder reduction
+  = forall row. ReducingDecoder !(B.Row row) !(D.Fold row reduction)
 
 instance Functor ReducingDecoder where
   fmap fn (ReducingDecoder rowDecoder rowsFold) =
@@ -66,4 +63,3 @@ instance Applicative ReducingDecoder where
 reducingDecoder :: B.Row row -> D.Fold row reduction -> ReducingDecoder reduction
 reducingDecoder =
   ReducingDecoder
-
