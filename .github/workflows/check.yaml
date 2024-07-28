@@ -1,17 +1,17 @@
 name: Compile, test and check the docs
 
 on:
-  workflow_call:
+  workflow_call: 
 
 jobs:
 
   check:
-
+    
     strategy:
       fail-fast: false
       matrix:
         include:
-          - ghc: 8.8.1
+          - ghc: 8.10.1
             ghc-options: ""
             ignore-haddock: true
             ignore-cabal-check: true
