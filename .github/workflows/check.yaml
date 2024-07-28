@@ -1,12 +1,12 @@
 name: Compile, test and check the docs
 
 on:
-  workflow_call:
+  workflow_call: 
 
 jobs:
 
   check:
-
+    
     strategy:
       fail-fast: false
       matrix:
