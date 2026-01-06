@@ -13,7 +13,7 @@ license-file: LICENSE
 
 source-repository head
   type: git
-  location: git://github.com/nikita-volkov/hasql-cursor-query.git
+  location: https://github.com/nikita-volkov/hasql-cursor-query
 
 common base
   default-language: Haskell2010
@@ -86,7 +86,7 @@ library
     Hasql.CursorQuery.Transactions
 
   build-depends:
-    base-prelude >=1 && <2,
+    base >=4.11 && <5,
     bytestring >=0.10 && <0.14,
     contravariant >=1.3 && <2,
     foldl >1 && <2,
