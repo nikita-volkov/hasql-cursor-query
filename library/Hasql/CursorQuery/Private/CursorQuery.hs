@@ -16,7 +16,7 @@ import qualified Hasql.Encoders as A
 -- where reduction strategy determines how to fold the rows into the final result,
 -- and batch size determines how many rows to fetch during each roundtrip to the database.
 data CursorQuery params result
-  = CursorQuery !ByteString !(A.Params params) !(ReducingDecoder result) !H.BatchSize
+  = CursorQuery !Text !(A.Params params) !(ReducingDecoder result) !H.BatchSize
 
 instance Profunctor CursorQuery where
   dimap fn1 fn2 (CursorQuery template encoder decoder batchSize) =
@@ -29,7 +29,7 @@ instance Functor (CursorQuery params) where
 -- |
 -- Given an SQL template, a params encoder, a reducing result decoder and a batch-size,
 -- constructs CursorQuery.
-cursorQuery :: ByteString -> A.Params params -> ReducingDecoder result -> H.BatchSize -> CursorQuery params result
+cursorQuery :: Text -> A.Params params -> ReducingDecoder result -> H.BatchSize -> CursorQuery params result
 cursorQuery =
   CursorQuery
 
