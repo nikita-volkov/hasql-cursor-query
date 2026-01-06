@@ -1,6 +1,9 @@
 module Main.IO where
 
 import qualified Hasql.Connection as B
+import qualified Hasql.Connection.Setting as Setting
+import qualified Hasql.Connection.Setting.Connection as Connection
+import qualified Hasql.Connection.Setting.Connection.Param as Param
 import qualified Hasql.Session as A
 import Rebase.Prelude
 
@@ -17,13 +20,16 @@ session session =
           ExceptT $ B.acquire settings
           where
             settings =
-              B.settings host port user password database
-              where
-                host = "localhost"
-                port = 5432
-                user = "postgres"
-                password = "postgres"
-                database = "postgres"
+              [ Setting.connection
+                  ( Connection.params
+                      [ Param.host "localhost",
+                        Param.port 5432,
+                        Param.user "postgres",
+                        Param.password "postgres",
+                        Param.dbname "postgres"
+                      ]
+                  )
+              ]
         use connection =
           lift $ handler connection
         release connection =
