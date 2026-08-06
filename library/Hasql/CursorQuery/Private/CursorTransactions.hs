@@ -1,6 +1,7 @@
 module Hasql.CursorQuery.Private.CursorTransactions where
 
 import qualified Control.Foldl as D
+import qualified Data.Text.Encoding as Text
 import qualified Hasql.CursorQuery.Private.CursorQuery as B
 import qualified Hasql.CursorQuery.Private.Decoders as I
 import Hasql.CursorQuery.Private.Prelude
@@ -36,5 +37,5 @@ fetchAndFoldCursorBatch cursor batchSize rowDecoder rowsFold =
 cursorQuery :: params -> B.CursorQuery params result -> G.CursorTransaction s result
 cursorQuery params (B.CursorQuery template encoder (B.ReducingDecoder rowDecoder rowsFold) batchSize) =
   do
-    cursor <- G.declareCursor template (G.encodedParams encoder params)
+    cursor <- G.declareCursor (Text.decodeUtf8 template) (G.encodedParams encoder params)
     fetchAndFoldCursor cursor batchSize rowDecoder rowsFold

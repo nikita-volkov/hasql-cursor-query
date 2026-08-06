@@ -1,35 +1,29 @@
 module Main.IO where
 
 import qualified Hasql.Connection as B
-import qualified Hasql.Connection.Setting as Setting
-import qualified Hasql.Connection.Setting.Connection as Connection
-import qualified Hasql.Connection.Setting.Connection.Param as Param
+import qualified Hasql.Connection.Settings as Settings
+import qualified Hasql.Errors as B
 import qualified Hasql.Session as A
+import qualified Pqi.Native as Pqi
 import Rebase.Prelude
 
 session :: A.Session a -> IO a
-session session =
-  withConnection (A.run session)
-    >>= either (fail . show) (either (fail . show) return)
+session theSession =
+  withConnection (\connection -> B.use connection theSession >>= either (fail . show) return)
+    >>= either (fail . show) return
   where
     withConnection :: (B.Connection -> IO a) -> IO (Either B.ConnectionError a)
     withConnection handler =
       runExceptT $ acquire >>= \connection -> use connection <* release connection
       where
         acquire =
-          ExceptT $ B.acquire settings
+          ExceptT $ B.acquire Pqi.adapter settings
           where
             settings =
-              [ Setting.connection
-                  ( Connection.params
-                      [ Param.host "localhost",
-                        Param.port 5432,
-                        Param.user "postgres",
-                        Param.password "postgres",
-                        Param.dbname "postgres"
-                      ]
-                  )
-              ]
+              Settings.hostAndPort "localhost" 5432
+                <> Settings.user "postgres"
+                <> Settings.password "postgres"
+                <> Settings.dbname "postgres"
         use connection =
           lift $ handler connection
         release connection =

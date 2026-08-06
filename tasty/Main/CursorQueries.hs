@@ -11,7 +11,7 @@ countPGType =
   cursorQuery sql encoder decoder batchSize_10
   where
     sql =
-      "select oid, typname from pg_type"
+      "select oid::int8, typname::text from pg_type"
     encoder =
       A.noParams
     decoder =
@@ -27,7 +27,7 @@ slectOIDAndTypeName =
   cursorQuery sql encoder decoder batchSize_10
   where
     sql =
-      "select oid, typname from pg_type"
+      "select oid::int8, typname::text from pg_type"
     encoder =
       A.noParams
     decoder =

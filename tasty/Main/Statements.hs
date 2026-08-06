@@ -7,7 +7,7 @@ import Rebase.Prelude
 
 countPGType :: Statement () Int
 countPGType =
-  Statement sql encoder decoder True
+  preparable sql encoder decoder
   where
     sql =
       "select count(*) from pg_type"
@@ -18,10 +18,10 @@ countPGType =
 
 slectOIDAndTypeName :: Statement () [(Int64, Text)]
 slectOIDAndTypeName =
-  Statement sql encoder decoder True
+  preparable sql encoder decoder
   where
     sql =
-      "select oid, typname from pg_type"
+      "select oid::int8, typname::text from pg_type"
     encoder =
       A.noParams
     decoder =
