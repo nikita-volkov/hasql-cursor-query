@@ -17,7 +17,7 @@
 # Unignore subtrees:
 !/.github/
 !/library/
-!/tasty/
+!/src/
 
 # Ignore noise:
 .DS_Store
