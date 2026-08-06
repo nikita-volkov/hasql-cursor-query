@@ -12,16 +12,16 @@ import Test.Tasty.Runners
 
 main :: IO ()
 main =
-  defaultMain $
-    localOption (NumThreads 1) $
-      testGroup
-        "All tests"
-        [ testCase "Amount" $
-            do
-              (count1, count2) <- F.session ((,) <$> A.statement () E.countPGType <*> C.cursorQuery () D.countPGType)
-              assertEqual (show (count1, count2)) count1 count2,
-          testCase "Equality" $
-            do
-              (result1, result2) <- F.session ((,) <$> A.statement () E.slectOIDAndTypeName <*> C.cursorQuery () D.slectOIDAndTypeName)
-              assertEqual (show (result1, result2)) result1 result2
-        ]
+  defaultMain
+    $ localOption (NumThreads 1)
+    $ testGroup
+      "All tests"
+      [ testCase "Amount" $
+          do
+            (count1, count2) <- F.session ((,) <$> A.statement () E.countPGType <*> C.cursorQuery () D.countPGType)
+            assertEqual (show (count1, count2)) count1 count2,
+        testCase "Equality" $
+          do
+            (result1, result2) <- F.session ((,) <$> A.statement () E.slectOIDAndTypeName <*> C.cursorQuery () D.slectOIDAndTypeName)
+            assertEqual (show (result1, result2)) result1 result2
+      ]
